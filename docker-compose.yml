@@ -1,0 +1,29 @@
+networks:
+  pokemon_network:
+    driver: bridge
+
+services:
+  db:
+    container_name: db
+    image: mongo
+    ports:
+      - "27018:27017"
+    env_file:
+      - ./db/.env
+    volumes:
+      - ./db/import:/tmp/import
+      - ./db/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    networks:
+      - pokemon_network
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./mongo-express/.env
+    depends_on:
+      - db
+    networks:
+      - pokemon_network
