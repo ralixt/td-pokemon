@@ -4,15 +4,14 @@ networks:
 
 services:
   db:
-    container_name: db
+    container_name: db-pokemon
     image: mongo
     ports:
       - "27018:27017"
     env_file:
       - ./db/.env
     volumes:
-      - ./db/import:/tmp/import
-      - ./db/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - ./db:/data/db
     networks:
       - pokemon_network
     restart: always
@@ -27,3 +26,34 @@ services:
       - db
     networks:
       - pokemon_network
+
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    depends_on:
+      - db
+    networks:
+      - pokemon_network
+    env_file:
+      - backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    depends_on:
+      - backend
+    networks:
+      - pokemon_network
+    env_file:
+      - frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
