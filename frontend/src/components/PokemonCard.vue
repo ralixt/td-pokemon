@@ -1,6 +1,5 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import {computed} from "vue";
 
 const router = useRouter()
 
@@ -15,44 +14,20 @@ const goToPokemon = (id) => {
   router.push(`/pokemon/${id}`)
 }
 
-
-const typeColors = {
-  acier: '#B7B7CE',
-  combat: '#C22E28',
-  dragon: '#7038F8',
-  eau: '#6390F0',
-  feu: '#FD7D24',
-  fee: '#EE99AC',
-  // fée: '#EE99AC',
-  glace: '#96D9D6',
-  insecte: '#A6B91A',
-  normal: '#A8A77A',
-  plante: '#7AC74C',
-  poison: '#A33EA1',
-  psy: '#F95587',
-  roche: '#B6A136',
-  sol: '#E2BF65',
-  spectre: '#735797',
-  tenebres: '#705746',
-  // ténèbres: '#705746',
-  vol: '#A98FF3',
-  electrik: '#F7D02C',
-  // électrik: '#F7D02C'
+const getBorderClass = (type) => {
+  return `border-${type.toLowerCase()}`
 }
-
-const borderColor = computed(() => {
-  const firstType = pokemon.types[0]?.name.toLowerCase()
-  return typeColors[firstType] || '#ddd'
-})
 
 </script>
 
 <template>
-  <div class="pokemon-card" @click="goToPokemon(pokemon.pokedex_id)" :style="{ borderColor: borderColor }">
-    <img class="pokemon-picture" :src="pokemon.sprites.regular" :alt="pokemon.name.fr">
-    <div class="pokemon-info">
+  <div class="pokemon-card" @click="goToPokemon(pokemon.pokedex_id)" :class="'border-' + pokemon.types[0]?.name.toLowerCase()">
+    <div class="pokemon-header">
       <span class="pokemon-id">#{{ String(pokemon.pokedex_id).padStart(3, '0') }}</span>
       <h3>{{ pokemon.name.fr }}</h3>
+    </div>
+    <img class="pokemon-picture" :src="pokemon.sprites.regular" :alt="pokemon.name.fr">
+    <div class="pokemon-info">
       <div class="types" v-if="pokemon.types">
         <span
             v-for="type in pokemon.types"
@@ -61,6 +36,18 @@ const borderColor = computed(() => {
             :class="type.name.toLowerCase()">
           {{ type.name }}
         </span>
+      </div>
+      <div class="stats">
+        <div>
+          <div class="stat"><strong>HP:</strong> {{ pokemon.stats.hp }}</div>
+          <div class="stat"><strong>ATK:</strong> {{ pokemon.stats.atk }}</div>
+          <div class="stat"><strong>DEF:</strong> {{ pokemon.stats.def }}</div>
+        </div>
+        <div>
+          <div class="stat"><strong>SPE ATK:</strong> {{ pokemon.stats.spe_atk }}</div>
+          <div class="stat"><strong>SPE DEF:</strong> {{ pokemon.stats.spe_def }}</div>
+          <div class="stat"><strong>VIT:</strong> {{ pokemon.stats.vit }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -75,14 +62,20 @@ const borderColor = computed(() => {
   transition: transform 0.2s;
   cursor: pointer;
   width: 250px;
-  height: 400px;
+  height: 450px;
   margin: 10px;
-  border: 5px solid;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pokemon-card:hover {
   transform: translateY(-5px);
+}
+
+.pokemon-header {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .pokemon-picture {
@@ -94,6 +87,7 @@ const borderColor = computed(() => {
 
 .pokemon-info {
   text-align: center;
+  width: 100%;
 }
 
 .pokemon-id {
@@ -115,6 +109,25 @@ const borderColor = computed(() => {
   font-size: 0.85em;
   text-transform: capitalize;
 }
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  text-align: left;
+  background-color: #f0f0f0;
+  color: #333;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.stat {
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 
 .acier {
   background-color: #B7B7CE;
@@ -200,5 +213,90 @@ const borderColor = computed(() => {
 .électrik {
   background-color: #F7D02C;
 }
+
+.border-acier {
+  border: 5px solid #B7B7CE;
+}
+
+.border-combat {
+  border: 5px solid #C22E28;
+}
+
+.border-dragon {
+  border: 5px solid #7038F8;
+}
+
+.border-eau {
+  border: 5px solid #6390F0;
+}
+
+.border-feu {
+  border: 5px solid #FD7D24;
+}
+
+.border-fee {
+  border: 5px solid #EE99AC;
+}
+
+.border-fée {
+  border: 5px solid #EE99AC;
+}
+
+.border-glace {
+  border: 5px solid #96D9D6;
+}
+
+.border-insecte {
+  border: 5px solid #A6B91A;
+}
+
+.border-normal {
+  border: 5px solid #A8A77A;
+}
+
+.border-plante {
+  border: 5px solid #7AC74C;
+}
+
+.border-poison {
+  border: 5px solid #A33EA1;
+}
+
+.border-psy {
+  border: 5px solid #F95587;
+}
+
+.border-roche {
+  border: 5px solid #B6A136;
+}
+
+.border-sol {
+  border: 5px solid #E2BF65;
+}
+
+.border-spectre {
+  border: 5px solid #735797;
+}
+
+.border-tenebres {
+  border: 5px solid #705746;
+}
+
+.border-ténèbres {
+  border: 5px solid #705746;
+}
+
+.border-vol {
+  border: 5px solid #A98FF3;
+}
+
+.border-electrik {
+  border: 5px solid #F7D02C;
+}
+
+.border-électrik {
+  border: 5px solid #F7D02C;
+}
+
 
 </style>
