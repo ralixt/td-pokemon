@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb://db:27017/pokemon', {
+        await mongoose.connect('mongodb://admin:password@db:27017/pokemon?authSource=admin', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });

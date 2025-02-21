@@ -10,20 +10,24 @@ const filteredPokemons = ref([])
 const loadPokemons = async () => {
   try {
     pokemons.value = await pokemonService.getAllPokemons()
-    filteredPokemons.value = pokemons.value
+    filteredPokemons.value = pokemons.value.filter(pokemon => pokemon.pokedex_id !== 0)
   } catch (error) {
     console.error('Erreur lors du chargement des pokémons:', error)
   }
 }
 
+
 const filterPokemons = () => {
   const search = searchTerm.value.toLowerCase()
   filteredPokemons.value = pokemons.value.filter(pokemon =>
-      pokemon.name.fr.toLowerCase().includes(search) ||
-      pokemon.name.en.toLowerCase().includes(search) ||
-      pokemon.pokedex_id.toString().includes(search)
+      (pokemon.name.fr.toLowerCase().includes(search) ||
+          pokemon.name.en.toLowerCase().includes(search) ||
+          pokemon.pokedex_id.toString().includes(search)) &&
+      pokemon.pokedex_id !== 0
   )
 }
+
+
 
 onMounted(() => {
   loadPokemons()
@@ -76,7 +80,7 @@ onMounted(() => {
 
 .pokemon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   padding: 20px 0;
 }
